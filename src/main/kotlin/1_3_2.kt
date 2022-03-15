@@ -1,5 +1,5 @@
 fun main(args: Array<String>) {
-    println("За переводы с любых карт комиссия 0.75%, минимум 35 рублей.")
+
     println("Введите сумму перевода:")
     println("Введите рубли:")
     val rub = readln()
