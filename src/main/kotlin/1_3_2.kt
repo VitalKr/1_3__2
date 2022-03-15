@@ -33,66 +33,72 @@ fun main(args: Array<String>) {
     }
     if ((amount > 150_000_00) || (sumMonth > 600_000_00)) {
         println("Превышен Ваш лимит 150000 рублей в сутки или 600000 рублей в месяц")
-    } else comission(type, sumMonth, amount)
+    } else commission(type, sumMonth, amount)
 
 }
 
-fun comission(
+fun commission(
     type: Int,
     sumMonth: Int,
     amount: Int
 ): Double {
-    when (type) {
+    return when (type) {
         1 -> {
-            return if (amount < 75000_00) {
-                val perevod = amount / 100
-                val procent = 0
-                println("Всего списано за перевод: $perevod")
-                println("Сумма комиссии за перевод: $procent")
-                procent.toDouble()
-            } else {
-                var procent = ((amount * (0.6 / 100)) + 20_00)
-                val perevod = (amount + (procent)) / 100
-                val procent1 = procent / 100
-                println("Всего списано за перевод: $perevod")
-                println("Сумма комиссии за перевод: $procent1")
-                procent
-            }
+            mastercard(amount)
         }
         2 -> {
-            return if ((35_00 < amount) && (amount < 150_000_00)) {
-                var procent = (amount * 0.75 / 100)
-                if (procent < 35_00) {
-                    procent = 35_00.0
-                }
-                val perevod = (amount + (procent)) / 100
-                val procent1 = procent / 100
-                println("Всего списано за перевод: $perevod")
-                println("Сумма комиссии за перевод: $procent1")
-                procent
-
-            } else {
-                println("Введенная сумма меньше 35 руб и более 150000 руб. перевод невозможен")
-                0.0
-            }
+            visa(amount)
         }
         3 -> {
-            return if ((amount > 15000_00) || (amount > sumMonth)) {
-                println("Превышен лимит для VK Pay. Максимальная сумма 15000 руб. за один раз и не боллее 40000 руб. в месяц.")
-                0.0
-            } else {
-                val perevod = amount / 100
-                val procent = 0.0
-                println("Всего списано за перевод: $perevod")
-                println("Сумма комиссии за перевод: $procent")
-                procent
-            }
+            vk(amount, sumMonth)
         }
         else -> {
             println("Ошибка перевода!")
-            return 0.0
+            0.0
         }
     }
+}
+
+private fun mastercard(amount: Int) = if (amount < 75000_00) {
+    val perevod = amount / 100
+    val procent = 0
+    println("Всего списано за перевод: $perevod")
+    println("Сумма комиссии за перевод: $procent")
+    procent.toDouble()
+} else {
+    val procent = ((amount * (0.6 / 100)) + 20_00)
+    val perevod = (amount + (procent)) / 100
+    val procent1 = procent / 100
+    println("Всего списано за перевод: $perevod")
+    println("Сумма комиссии за перевод: $procent1")
+    procent
+}
+
+private fun visa(amount: Int) = if ((35_00 < amount) && (amount < 150_000_00)) {
+    var procent = (amount * 0.75 / 100)
+    if (procent < 35_00) {
+        procent = 35_00.0
+    }
+    val perevod = (amount + (procent)) / 100
+    val procent1 = procent / 100
+    println("Всего списано за перевод: $perevod")
+    println("Сумма комиссии за перевод: $procent1")
+    procent
+
+} else {
+    println("Введенная сумма меньше 35 руб и более 150000 руб. перевод невозможен")
+    0.0
+}
+
+private fun vk(amount: Int, sumMonth: Int) = if ((amount > 15000_00) || (amount > sumMonth)) {
+    println("Превышен лимит для VK Pay. Максимальная сумма 15000 руб. за один раз и не боллее 40000 руб. в месяц.")
+    0.0
+} else {
+    val perevod = amount / 100
+    val procent = 0.0
+    println("Всего списано за перевод: $perevod")
+    println("Сумма комиссии за перевод: $procent")
+    procent
 }
 
 
