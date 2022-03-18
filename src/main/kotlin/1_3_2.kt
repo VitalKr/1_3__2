@@ -60,7 +60,7 @@ fun commission(
 }
 
 private fun mastercard(amount: Int) = if (amount < 75000_00) {
-    val perevod = (amount / 100).toDouble()
+    val perevod = (amount / 100.00)
     val procent1 = 0.0
     print(perevod, procent1)
     procent1
@@ -88,19 +88,19 @@ private fun visa(amount: Int) = if ((35_00 < amount) && (amount < 150_000_00)) {
     0.0
 }
 
-private fun vk(amount: Int, sumMonth: Int) = if ((amount > 15000_00) || (amount > sumMonth)) {
+private fun vk(amount: Int, sumMonth: Int) = if ((amount > 15000_00) || (40000_00 < sumMonth)) {
     println("Превышен лимит для VK Pay. Максимальная сумма 15000 руб. за один раз и не боллее 40000 руб. в месяц.")
     0.0
 } else {
-    val perevod = (amount / 100).toDouble()
+    val perevod = (amount / 100.00)
     val procent1 = 0.0
     print(perevod, procent1)
     procent1
 }
 
 private fun print(perevod: Double, procent1: Double) {
-    println("Всего списано за перевод: ${Math.round(perevod * 10.0) / 10.0}")
-    println("Сумма комиссии за перевод: ${Math.round(procent1 * 10.0) / 10.0}")
+    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
+    println("Сумма комиссии за перевод: ${Math.round(procent1 * 100.0) / 100.0}")
 }
 
 
