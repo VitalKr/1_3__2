@@ -16,7 +16,7 @@ fun main(args: Array<String>) {
     var amount_k = 0
     var amount = 0
     var sumMonth = 0
-    var type = 1
+    var type = 0
 
     try {
         amount_ru = rub.toInt()
@@ -62,15 +62,15 @@ fun commission(
 private fun mastercard(amount: Int) = if (amount < 75000_00) {
     val perevod = amount / 100
     val procent = 0
-    println("Всего списано за перевод: $perevod")
-    println("Сумма комиссии за перевод: $procent")
+    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
+    println("Сумма комиссии за перевод: ${Math.round(procent * 100.0) / 100.0}")
     procent.toDouble()
 } else {
     val procent = ((amount * (0.6 / 100)) + 20_00)
     val perevod = (amount + (procent)) / 100
     val procent1 = procent / 100
-    println("Всего списано за перевод: $perevod")
-    println("Сумма комиссии за перевод: $procent1")
+    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
+    println("Сумма комиссии за перевод: ${Math.round(procent1 * 100.0) / 100.0}")
     procent
 }
 
@@ -81,8 +81,8 @@ private fun visa(amount: Int) = if ((35_00 < amount) && (amount < 150_000_00)) {
     }
     val perevod = (amount + (procent)) / 100
     val procent1 = procent / 100
-    println("Всего списано за перевод: $perevod")
-    println("Сумма комиссии за перевод: $procent1")
+    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
+    println("Сумма комиссии за перевод: ${Math.round(procent1 * 100.0) / 100.0}")
     procent
 
 } else {
@@ -96,8 +96,8 @@ private fun vk(amount: Int, sumMonth: Int) = if ((amount > 15000_00) || (amount 
 } else {
     val perevod = amount / 100
     val procent = 0.0
-    println("Всего списано за перевод: $perevod")
-    println("Сумма комиссии за перевод: $procent")
+    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
+    println("Сумма комиссии за перевод: ${Math.round(procent * 100.0) / 100.0}")
     procent
 }
 
