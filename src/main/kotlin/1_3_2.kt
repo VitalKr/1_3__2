@@ -60,19 +60,18 @@ fun commission(
 }
 
 private fun mastercard(amount: Int) = if (amount < 75000_00) {
-    val perevod = amount / 100
-    val procent = 0
-    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
-    println("Сумма комиссии за перевод: ${Math.round(procent * 100.0) / 100.0}")
-    procent.toDouble()
+    val perevod = (amount / 100).toDouble()
+    val procent1 = 0.0
+    print(perevod, procent1)
+    procent1
 } else {
     val procent = ((amount * (0.6 / 100)) + 20_00)
     val perevod = (amount + (procent)) / 100
     val procent1 = procent / 100
-    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
-    println("Сумма комиссии за перевод: ${Math.round(procent1 * 100.0) / 100.0}")
+    print(perevod, procent1)
     procent
 }
+
 
 private fun visa(amount: Int) = if ((35_00 < amount) && (amount < 150_000_00)) {
     var procent = (amount * 0.75 / 100)
@@ -81,8 +80,7 @@ private fun visa(amount: Int) = if ((35_00 < amount) && (amount < 150_000_00)) {
     }
     val perevod = (amount + (procent)) / 100
     val procent1 = procent / 100
-    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
-    println("Сумма комиссии за перевод: ${Math.round(procent1 * 100.0) / 100.0}")
+    print(perevod, procent1)
     procent
 
 } else {
@@ -94,14 +92,16 @@ private fun vk(amount: Int, sumMonth: Int) = if ((amount > 15000_00) || (amount 
     println("Превышен лимит для VK Pay. Максимальная сумма 15000 руб. за один раз и не боллее 40000 руб. в месяц.")
     0.0
 } else {
-    val perevod = amount / 100
-    val procent = 0.0
-    println("Всего списано за перевод: ${Math.round(perevod * 100.0) / 100.0}")
-    println("Сумма комиссии за перевод: ${Math.round(procent * 100.0) / 100.0}")
-    procent
+    val perevod = (amount / 100).toDouble()
+    val procent1 = 0.0
+    print(perevod, procent1)
+    procent1
 }
 
-
+private fun print(perevod: Double, procent1: Double) {
+    println("Всего списано за перевод: ${Math.round(perevod * 10.0) / 10.0}")
+    println("Сумма комиссии за перевод: ${Math.round(procent1 * 10.0) / 10.0}")
+}
 
 
 
