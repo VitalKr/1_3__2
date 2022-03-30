@@ -15,8 +15,9 @@ fun main() {
     println("4. МИР")
     println("5. VK Pay")
     val typeRead = readln()
-    println("Введите сумму предыдущих покупок за месяц в рублях:")
-    val sumMonthRead = readln()
+    println("Введите сумму предыдущих покупок за месяц в рублях или нажмите Enter, если покупок не было:")
+    var sumMonthRead = readln()
+    if (sumMonthRead == "") sumMonthRead = "0"
     val amountRu: Int
     val amountK: Int
     val amount: Int
@@ -32,12 +33,13 @@ fun main() {
         amount = amountRu * 100 + amountK
         print("Сумма желаемого перевода равна:")
         println("  $amountRu руб. $amountK коп.")
-        println("______________________________________________________________")
+
     } catch (e: Exception) {
         println("Вы ввели не число")
         exitProcess(-1)
     }
-
+    println("Сумма покупок за предыдущий месяц: ${sumMonth / 100} руб.")
+    println("______________________________________________________________")
     if ((amount > 150_000_00) || (sumMonth > 600_000_00)) {
         println("Превышен Ваш лимит 150000 рублей в сутки или 600000 рублей в месяц")
     } else commission(type, sumMonth, amount)
