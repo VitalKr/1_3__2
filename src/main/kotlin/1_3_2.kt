@@ -7,6 +7,7 @@ const val LIMIT_MONTH_MAX: Int = 600_000_00
 const val LIMIT_MASTERCARD_MAX: Int = 75000_00
 const val PROCENT_MASTERCARD: Double = 0.6
 const val FIX_SUM_MASTERCARD: Int = 20_00
+const val PROCENT_VISA: Double = 0.75
 const val LIMIT_VISA_MIN: Int = 35_00
 const val LIMIT_VISA_MAX: Int = 150_000_00
 const val LIMIT_VK_MIN: Int = 15000_00
@@ -56,7 +57,7 @@ fun main() {
     if ((amount > LIMIT_DAY_MAX) || (sumMonth > LIMIT_MONTH_MAX)) {
         println("Превышен Ваш лимит 150000 рублей в сутки или 600000 рублей в месяц")
     } else commission(type, sumMonth, amount)
-    println("Сумма комиссии за перевод: ${DecimalFormat("#.##").format(commission(type, sumMonth, amount) / HUNDRED)}")
+    println("Сумма комиссии за перевод: ${DecimalFormat("#.##").format(commission(type, sumMonth, amount) / HUNDRED )}")
 }
 
 fun commission(
@@ -83,25 +84,22 @@ fun commission(
 
 private fun mastercard(amount: Int) = if (amount < LIMIT_MASTERCARD_MAX) {
     val perevod = (amount / HUNDRED.toDouble())
-    val commission1 = 0.0
+    val commission = 0.0
     sumPrint(perevod)
-    commission1
+    commission
 } else {
     val commission = ((amount * (PROCENT_MASTERCARD / HUNDRED)) + FIX_SUM_MASTERCARD)
     val perevod = (amount + (commission)) / HUNDRED
-    val commission1 = commission / HUNDRED
     sumPrint(perevod)
     commission
 }
 
 private fun visa(amount: Int) = if (amount < LIMIT_VISA_MAX) {
-    var commission = (amount * 0.75 / HUNDRED)
-    println(commission / HUNDRED)
+    var commission = (amount * PROCENT_VISA / HUNDRED)
     if (commission < LIMIT_VISA_MIN) {
         commission = LIMIT_VISA_MIN.toDouble()
     }
     val perevod = (amount + (commission)) / HUNDRED
-    val commission1 = commission / HUNDRED
     sumPrint(perevod)
     commission
 
@@ -115,9 +113,9 @@ private fun vk(amount: Int, sumMonth: Int) = if ((amount > LIMIT_VK_MIN) || (LIM
     0.0
 } else {
     val perevod = (amount / HUNDRED.toDouble())
-    val commission1 = 0.0
+    val commission = 0.0
     sumPrint(perevod)
-    commission1
+    commission
 }
 
 private fun sumPrint(perevod: Double) {
