@@ -1,6 +1,5 @@
+import java.text.DecimalFormat
 import kotlin.system.exitProcess
-
-private const val i = 100
 
 const val HUNDRED: Int = 100
 const val LIMIT_DAY_MAX: Int = 150_000_00
@@ -12,6 +11,7 @@ const val LIMIT_VISA_MIN: Int = 35_00
 const val LIMIT_VISA_MAX: Int = 150_000_00
 const val LIMIT_VK_MIN: Int = 15000_00
 const val LIMIT_VK_MAX: Int = 40000_00
+
 fun main() {
 
     println("Введите сумму перевода:")
@@ -56,6 +56,7 @@ fun main() {
     if ((amount > LIMIT_DAY_MAX) || (sumMonth > LIMIT_MONTH_MAX)) {
         println("Превышен Ваш лимит 150000 рублей в сутки или 600000 рублей в месяц")
     } else commission(type, sumMonth, amount)
+    println("Сумма комиссии за перевод: ${DecimalFormat("#.##").format(commission(type, sumMonth, amount) / HUNDRED)}")
 }
 
 fun commission(
@@ -83,13 +84,13 @@ fun commission(
 private fun mastercard(amount: Int) = if (amount < LIMIT_MASTERCARD_MAX) {
     val perevod = (amount / HUNDRED.toDouble())
     val commission1 = 0.0
-    sumPrint(perevod, commission1)
+    sumPrint(perevod)
     commission1
 } else {
     val commission = ((amount * (PROCENT_MASTERCARD / HUNDRED)) + FIX_SUM_MASTERCARD)
     val perevod = (amount + (commission)) / HUNDRED
     val commission1 = commission / HUNDRED
-    sumPrint(perevod, commission1)
+    sumPrint(perevod)
     commission
 }
 
@@ -101,7 +102,7 @@ private fun visa(amount: Int) = if (amount < LIMIT_VISA_MAX) {
     }
     val perevod = (amount + (commission)) / HUNDRED
     val commission1 = commission / HUNDRED
-    sumPrint(perevod, commission1)
+    sumPrint(perevod)
     commission
 
 } else {
@@ -115,13 +116,13 @@ private fun vk(amount: Int, sumMonth: Int) = if ((amount > LIMIT_VK_MIN) || (LIM
 } else {
     val perevod = (amount / HUNDRED.toDouble())
     val commission1 = 0.0
-    sumPrint(perevod, commission1)
+    sumPrint(perevod)
     commission1
 }
 
-private fun sumPrint(perevod: Double, commission1: Double) {
-    println("Всего списано за перевод: $perevod")
-    println("Сумма комиссии за перевод: $commission1")
+private fun sumPrint(perevod: Double) {
+    println("Всего списано за перевод: ${DecimalFormat("#.##").format(perevod)}")
+
 }
 
 
