@@ -1,6 +1,12 @@
 import java.text.DecimalFormat
 import kotlin.system.exitProcess
 
+enum class Card(val num: Int) {
+    MASTERCARD(1), MAESTRO(2),
+    VISA(3), MIR(4),
+    VK(5)
+}
+
 const val HUNDRED: Int = 100
 const val LIMIT_DAY_MAX: Int = 150_000_00
 const val LIMIT_MONTH_MAX: Int = 600_000_00
@@ -54,35 +60,51 @@ fun main() {
     }
     println("Сумма покупок за предыдущий месяц: ${sumMonth / HUNDRED} руб.")
     println("______________________________________________________________")
-    if ((amount > LIMIT_DAY_MAX) || (sumMonth > LIMIT_MONTH_MAX)) {
+    if (limitAll(amount, sumMonth)) {
         println("Превышен Ваш лимит 150000 рублей в сутки или 600000 рублей в месяц")
-    } else commission(type, sumMonth, amount)
-    println("Сумма комиссии за перевод: ${DecimalFormat("#.##").format(commission(type, sumMonth, amount) / HUNDRED )}")
+    } else {
+        println(
+            "Сумма комиссии за перевод: ${
+                DecimalFormat("#.##").format(
+                    commission(
+                        type,
+                        sumMonth,
+                        amount
+                    ) / HUNDRED
+                )
+            }"
+        )
+    }
 }
 
 fun commission(
     type: Int = 5,
     sumMonth: Int = 0,
-    amount: Int
+    amount: Int,
+    mastercard: Int = Card.MASTERCARD.num,
+    maestro: Int = Card.MAESTRO.num,
+    visa: Int = Card.VISA.num,
+    mir: Int = Card.MIR.num,
+    vk: Int = Card.VK.num
 ): Double {
     return when (type) {
-        1, 2 -> {
+        mastercard, maestro -> {
             mastercard(amount)
         }
-        3, 4 -> {
+        visa, mir -> {
             visa(amount)
         }
-        5 -> {
+        vk -> {
             vk(amount, sumMonth)
         }
         else -> {
             println("Ошибка перевода!")
-            0.0
+            exitProcess(-1)
         }
     }
 }
 
-private fun mastercard(amount: Int) = if (amount < LIMIT_MASTERCARD_MAX) {
+private fun mastercard(amount: Int) = if (mastercardLimit(amount)) {
     val perevod = (amount / HUNDRED.toDouble())
     val commission = 0.0
     sumPrint(perevod)
@@ -94,7 +116,7 @@ private fun mastercard(amount: Int) = if (amount < LIMIT_MASTERCARD_MAX) {
     commission
 }
 
-private fun visa(amount: Int) = if (amount < LIMIT_VISA_MAX) {
+private fun visa(amount: Int) = if (visaLimit(amount)) {
     var commission = (amount * PROCENT_VISA / HUNDRED)
     if (commission < LIMIT_VISA_MIN) {
         commission = LIMIT_VISA_MIN.toDouble()
@@ -105,18 +127,25 @@ private fun visa(amount: Int) = if (amount < LIMIT_VISA_MAX) {
 
 } else {
     println("Введенная сумма более 150000 руб. перевод невозможен")
-    0.0
+    exitProcess(-1)
 }
 
-private fun vk(amount: Int, sumMonth: Int) = if ((amount > LIMIT_VK_MIN) || (LIMIT_VK_MAX < sumMonth)) {
+private fun vk(amount: Int, sumMonth: Int) = if (vkLimit(amount, sumMonth)) {
     println("Превышен лимит для VK Pay. Максимальная сумма 15000 руб. за один раз и не боллее 40000 руб. в месяц.")
-    0.0
+    exitProcess(-1)
 } else {
     val perevod = (amount / HUNDRED.toDouble())
     val commission = 0.0
     sumPrint(perevod)
     commission
 }
+
+private fun limitAll(amount: Int, sumMonth: Int) =
+    (amount > LIMIT_DAY_MAX) || (sumMonth > LIMIT_MONTH_MAX)
+
+private fun mastercardLimit(amount: Int) = amount < LIMIT_MASTERCARD_MAX
+private fun visaLimit(amount: Int) = amount < LIMIT_VISA_MAX
+private fun vkLimit(amount: Int, sumMonth: Int) = (amount > LIMIT_VK_MIN) || (LIMIT_VK_MAX < sumMonth)
 
 private fun sumPrint(perevod: Double) {
     println("Всего списано за перевод: ${DecimalFormat("#.##").format(perevod)}")
